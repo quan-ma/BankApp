@@ -73,6 +73,7 @@ namespace BankApp.Models
 
                 entity.Property(e => e.Password)
                     .IsRequired()
+                    .UseCollation("SQL_Latin1_General_CP1_CI_AS")
                     .HasMaxLength(32)
                     .IsUnicode(false)
                     .HasColumnName("password");
