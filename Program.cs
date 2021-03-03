@@ -1,4 +1,6 @@
 ﻿using System;
+using BankApp.Models;
+using R = BankApp.Register;
 
 
 namespace BankApp
@@ -6,20 +8,26 @@ namespace BankApp
     class Program
     {
         static void Main(string[] args)
-        {
+        {   
+            System.Console.WriteLine("Welcome to MA Bank");
+            System.Console.WriteLine("[1] Login \n [2] Register");
+            R.myRegistration();
+
+
             // using (var ctx = new QuanDBContext())
             // {
-            //     // var user = new User()
-            //     // {
-            //     //     Id = 1,
-            //     //     FirstName = "Quan",
-            //     //     LastName = "Mo",
-            //     //     Password = "theheo",
-            //     //     Username = "qma"
-            //     // };
-            //     // ctx.Add(user);
-            //     // ctx.SaveChanges();
+            //     var user = new User()
+            //     {
+            //         FirstName = "Dwight",
+            //         Lastname = "Schrute",
+            //         Password = "password",
+            //         Username = "Dwigt"
+            //     };
+            //     ctx.Add(user);
+            //     ctx.SaveChanges();
             // }
+
+            
         }
     }
 }
