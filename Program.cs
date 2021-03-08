@@ -11,21 +11,21 @@ namespace BankApp
         {   
             System.Console.WriteLine("Welcome to MA Bank");
             System.Console.WriteLine("[1] Login \n [2] Register");
-            R.myRegistration();
+            //R.myRegistration();
 
 
-            // using (var ctx = new QuanDBContext())
-            // {
-            //     var user = new User()
-            //     {
-            //         FirstName = "Dwight",
-            //         Lastname = "Schrute",
-            //         Password = "password",
-            //         Username = "Dwigt"
-            //     };
-            //     ctx.Add(user);
-            //     ctx.SaveChanges();
-            // }
+            using (var ctx = new QuanDBContext())
+            {
+                var user = new User()
+                {
+                    FirstName = "Dwight",
+                    Lastname = "Schrute",
+                    Password = "password",
+                    Username = "Dwigt"
+                };
+                ctx.Add(user);
+                ctx.SaveChanges();
+            }
 
             
         }
