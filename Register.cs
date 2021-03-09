@@ -14,13 +14,13 @@ namespace BankApp
             using (var ctx = new QuanDBContext())
             {
                 User u = new User();
-                bool isValid;
+                bool isValid = true;
                 foreach (PropertyInfo pi in u.GetType().GetProperties().Where(property => !"Id".Contains(property.Name)))
                 {
                     do
                     {
                         Console.WriteLine($"Enter {pi.Name}");
-                        string input = Console.ReadLine();
+                        string input = pi.Name == "Password" ? HidePassword() : Console.ReadLine();
                         pi.SetValue(u, Convert.ChangeType(input, pi.PropertyType), null);
                         RegistrationValidation rv = new RegistrationValidation();
                         ValidationResult results = rv.Validate(u);
@@ -28,29 +28,13 @@ namespace BankApp
 
                         if (pi.Name == "Username" && isValid)
                         {
-                            var unique = from user in ctx.Users
-                                         where user.Username == input
-                                         select user.Username.FirstOrDefault();
-
-                            if (unique.Count() > 0)
-                            {
-                                Console.WriteLine("NOT UNIQUE, try again");
-                                isValid = false;
-                            }
-                            else
-                            {
-                                break;
-                            }
+                            isValid = rv.UniquenessCheck(input);
                         }
                         if (pi.Name == "Password" && isValid)
                         {
                             Console.WriteLine($"Confirm {pi.Name}");
-                            string confirm = Console.ReadLine();
-                            if(confirm != input)
-                            {
-                                Console.WriteLine($"{pi.Name} does not match, try again");
-                                isValid = false;
-                            }
+                            string confirm = HidePassword();
+                            isValid = rv.ConfirmPassword(input, confirm);
                         }
                     } while (!isValid);
                 }
@@ -58,6 +42,18 @@ namespace BankApp
                 ctx.SaveChanges();
             }
 
+        }
+        public static string HidePassword()
+        {
+            string password = null;
+            while (true)
+            {
+                var key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Enter)
+                    break;
+                password += key.KeyChar;
+            }
+            return password;
         }
     }
 }

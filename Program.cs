@@ -13,7 +13,7 @@ namespace BankApp
             do
             {
                 System.Console.WriteLine("Welcome to MA Bank");
-                System.Console.WriteLine("[1] Login \n[2] Register");
+                System.Console.WriteLine("[1] Login \n[2] Register \n[0] Exit");
                 selection = Console.ReadLine();
                 if (selection == "1")
                 {
