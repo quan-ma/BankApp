@@ -1,6 +1,7 @@
 using System.Linq;
 using BankApp.Models;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace BankApp
 {
@@ -22,6 +23,22 @@ namespace BankApp
 
             RuleFor(ln => ln.Lastname)
             .MaximumLength(32).WithMessage("Must be no more than 32 characters");
+        }
+
+        public bool CheckValidation(ValidationResult results)
+        {
+            if (!results.IsValid)
+            {
+                foreach (ValidationFailure failure in results.Errors)
+                {
+                    System.Console.WriteLine($"{failure.PropertyName}: {failure.ErrorMessage}, try again");
+                }
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 
     }

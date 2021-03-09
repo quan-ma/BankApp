@@ -11,58 +11,52 @@ namespace BankApp
     {
         public static void myRegistration()
         {
-            List<string> dbUserNames = new List<string>();
-
             using (var ctx = new QuanDBContext())
             {
-                dbUserNames = ctx.Users.Select(u => u.Username).ToList();
-            }
-
-            List<string> errors = new List<string>();
-            User u = new User();
-
-            do
-            {
+                User u = new User();
+                bool isValid;
                 foreach (PropertyInfo pi in u.GetType().GetProperties().Where(property => !"Id".Contains(property.Name)))
                 {
-
-                    Console.WriteLine($"Enter {pi.Name}");
-                    string input = Console.ReadLine();
-                    using (var ctx = new QuanDBContext())
+                    do
                     {
-                        if (pi.Name == "Username")
+                        Console.WriteLine($"Enter {pi.Name}");
+                        string input = Console.ReadLine();
+                        pi.SetValue(u, Convert.ChangeType(input, pi.PropertyType), null);
+                        RegistrationValidation rv = new RegistrationValidation();
+                        ValidationResult results = rv.Validate(u);
+                        isValid = rv.CheckValidation(results);
+
+                        if (pi.Name == "Username" && isValid)
                         {
                             var unique = from user in ctx.Users
                                          where user.Username == input
                                          select user.Username.FirstOrDefault();
-                            
+
                             if (unique.Count() > 0)
                             {
-                                Console.WriteLine("NOT UNIQUE");
+                                Console.WriteLine("NOT UNIQUE, try again");
+                                isValid = false;
                             }
                             else
                             {
-                                u.Username = input;
+                                break;
                             }
                         }
-                    }
-
-
-
+                        if (pi.Name == "Password" && isValid)
+                        {
+                            Console.WriteLine($"Confirm {pi.Name}");
+                            string confirm = Console.ReadLine();
+                            if(confirm != input)
+                            {
+                                Console.WriteLine($"{pi.Name} does not match, try again");
+                                isValid = false;
+                            }
+                        }
+                    } while (!isValid);
                 }
-
-                RegistrationValidation rv = new RegistrationValidation();
-
-                ValidationResult results = rv.Validate(u);
-
-                if (results.IsValid == false)
-                {
-                    foreach (ValidationFailure failure in results.Errors)
-                    {
-                        System.Console.WriteLine($"{failure.PropertyName}: {failure.ErrorMessage}");
-                    }
-                }
-            } while (false); 
+                ctx.Add(u);
+                ctx.SaveChanges();
+            }
 
         }
     }

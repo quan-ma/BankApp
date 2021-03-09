@@ -8,26 +8,41 @@ namespace BankApp
     class Program
     {
         static void Main(string[] args)
-        {   
-            System.Console.WriteLine("Welcome to MA Bank");
-            System.Console.WriteLine("[1] Login \n [2] Register");
-            //R.myRegistration();
-
-
-            using (var ctx = new QuanDBContext())
+        {
+            string selection;
+            do
             {
-                var user = new User()
+                System.Console.WriteLine("Welcome to MA Bank");
+                System.Console.WriteLine("[1] Login \n[2] Register");
+                selection = Console.ReadLine();
+                if (selection == "1")
                 {
-                    FirstName = "Dwight",
-                    Lastname = "Schrute",
-                    Password = "password",
-                    Username = "Dwigt"
-                };
-                ctx.Add(user);
-                ctx.SaveChanges();
-            }
+                    //Login
+                }
+                if (selection == "2")
+                {
+                    R.myRegistration();
+                }
+            } while(selection != "0");
 
-            
+
+
+
+
+            // using (var ctx = new QuanDBContext())
+            // {
+            //     var user = new User()
+            //     {
+            //         FirstName = "Dwight",
+            //         Lastname = "Schrute",
+            //         Password = "password",
+            //         Username = "Dwigt"
+            //     };
+            //     ctx.Add(user);
+            //     ctx.SaveChanges();
+            // }
+
+
         }
     }
 }
